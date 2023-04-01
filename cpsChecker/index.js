@@ -150,10 +150,12 @@ function verifyCps(inputFrames, breakArray, numOfClicks, minTimeS){
 }
 
 function validMacro(macro){
-    const arrayOfLines = macro.split('\n');
+    const arrayOfLines = macro.trim().split('\n');
     if(arrayOfLines.length < 2){ return false; }
     for(var i = 0; i < arrayOfLines.length; i++){
-        var lineChoppedUp = arrayOfLines[i].split(/(\s+)/).trim();
+        var lineChoppedUp1 = arrayOfLines[i].trim().split(/(\s+)/);
+        var lineChoppedUp = lineChoppedUp1.filter(n => isANumber(n));
+		console.log(lineChoppedUp);
         if(i == 0){
            if(lineChoppedUp.length != 1 || !isANumber(lineChoppedUp[0])){
             return false;
@@ -174,9 +176,10 @@ function isANumber(str){
   }
 
 function parseP1InputsToArray(macroTxt){
-    const lineArray = macroTxt.split('\n');
+    const lineArray = macroTxt.trim().split('\n');
     for(var i = 0; i < lineArray.length; i++){
-        var lineAsInts = lineArray[i].split(/(\s+)/).trim();
+        var lineAsInts1 = lineArray[i].trim().split(/(\s+)/);
+        var lineAsInts= lineAsInts1.filter(n => isANumber(n));
         if(i == 0){
             framerate = parseInt(lineAsInts, 10);
             continue;
@@ -188,9 +191,10 @@ function parseP1InputsToArray(macroTxt){
 }
 
 function parseP2InputsToArray(macroTxt){
-    const lineArray = macroTxt.split('\n');
+    const lineArray = macroTxt.trim().split('\n');
     for(var i = 0; i < lineArray.length; i++){
-        var lineAsInts = lineArray[i].split(/(\s+)/).trim();
+        var lineAsInts1 = lineArray[i].trim().split(/(\s+)/);
+        var lineAsInts= lineAsInts1.filter(n => isANumber(n));
         if(i == 0){
             framerate = parseInt(lineAsInts, 10);
             continue;
