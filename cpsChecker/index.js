@@ -155,7 +155,6 @@ function validMacro(macro){
     for(var i = 0; i < arrayOfLines.length; i++){
         var lineChoppedUp1 = arrayOfLines[i].trim().split(/(\s+)/);
         var lineChoppedUp = lineChoppedUp1.filter(n => isANumber(n));
-		console.log(lineChoppedUp);
         if(i == 0){
            if(lineChoppedUp.length != 1 || !isANumber(lineChoppedUp[0])){
             return false;
