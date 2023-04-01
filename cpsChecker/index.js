@@ -153,7 +153,7 @@ function validMacro(macro){
     const arrayOfLines = macro.split('\n');
     if(arrayOfLines.length < 2){ return false; }
     for(var i = 0; i < arrayOfLines.length; i++){
-        var lineChoppedUp = arrayOfLines[i].split(' ');
+        var lineChoppedUp = arrayOfLines[i].split(/(\s+)/);
         if(i == 0){
            if(lineChoppedUp.length != 1 || !isANumber(lineChoppedUp[0])){
             return false;
@@ -176,7 +176,7 @@ function isANumber(str){
 function parseP1InputsToArray(macroTxt){
     const lineArray = macroTxt.split('\n');
     for(var i = 0; i < lineArray.length; i++){
-        var lineAsInts = lineArray[i].split(' ');
+        var lineAsInts = lineArray[i].split(/(\s+)/);
         if(i == 0){
             framerate = parseInt(lineAsInts, 10);
             continue;
@@ -190,7 +190,7 @@ function parseP1InputsToArray(macroTxt){
 function parseP2InputsToArray(macroTxt){
     const lineArray = macroTxt.split('\n');
     for(var i = 0; i < lineArray.length; i++){
-        var lineAsInts = lineArray[i].split(' ');
+        var lineAsInts = lineArray[i].split(/(\s+)/);
         if(i == 0){
             framerate = parseInt(lineAsInts, 10);
             continue;
