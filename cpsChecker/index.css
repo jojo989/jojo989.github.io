@@ -1,0 +1,369 @@
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  width:400px;
+  height:300px;
+}
+
+main{
+  margin:0.8rem;
+}
+
+.description{
+  position:relative;
+  top:10px;
+  width:700px;
+}
+
+h1{
+  background:#D9D9D9;
+  width:200px;
+}
+
+.inputBox{
+  position:relative;
+  top:25px;
+  background:#D9D9D9;
+  width:550px;
+  height:350px;
+}
+
+.pasteArea{
+  width:400px;
+  height:200px;
+  resize:none;
+}
+
+.uploadButton{
+  position:relative;
+  bottom:3px;
+}
+
+button{
+  border-color:#E7E6F3;
+  background:#AABBFA;
+  border-style:ridge;
+  padding:7px;
+}
+
+.uploadButton{
+  border-color:#E7E6F3;
+  background:#AABBFA;
+  border-style:ridge;
+  padding:7px;
+}
+
+.uploadButton:hover{
+  background-color:#8299F1;
+}
+
+button:hover{
+  background-color:#8299F1;
+}
+
+
+.pasteText{
+  position:relative;
+  left:102px;
+  bottom:23px;
+  font-size:18px;
+}
+
+.noFileText{
+  position:relative;
+  left:312px;
+  bottom:238px;
+  font-size: 13px;
+}
+
+.submitText{
+  position:relative;
+  left:450px;
+  bottom:80px;
+}
+
+.outputBox{
+  position:relative;
+  bottom:325px;
+  left: 730px;
+  background:#D9D9D9;
+  width:620px;
+  height:650px;
+  display:block;
+}
+
+.img{
+  position:relative;
+  left:450;
+  bottom:85;
+  pointer-events:fill;
+}
+
+.arrow{
+  width:85px;
+  height:auto;
+}
+
+.hoverArrow{
+  position:absolute;
+  top:0;
+  left:0;
+  width:85px;
+  height:auto;
+  display:none;
+}
+
+.img:hover .hoverArrow{
+  display:inline;
+}
+
+input[type="file"]{
+  display:none;
+}
+
+.inputBoxInner{
+  position:relative;
+  top:30px;
+}
+
+h2{
+  position:relative;
+  background:#D9D9D9;
+  width:110px;
+  left:730px;
+  bottom:1050px;
+  padding:5px;
+  font-size: 30px;
+}
+
+.outArea1{
+  z-index: 1000;
+  position:relative;
+  top:50px;
+  left:30px;
+  width:560px;
+  height:100px;
+  resize:none;
+}
+
+.p1results{
+  position:relative;
+  bottom:75px;
+  left:30px;
+  width:580px;
+  height:100px;
+}
+
+.outArea2{
+  z-index: 1000;
+  position:relative;
+  top:50px;
+  left:30px;
+  width:560px;
+  height:100px;
+  resize:none;
+}
+
+.p2results{
+  position:relative;
+  bottom:75px;
+  left:40px;
+  width:580px;
+  height:100px;
+}
+
+.img2{
+  position:relative;
+  left:120;
+  bottom:15;
+  pointer-events:fill;
+}
+
+.img2:hover .hoverArrow{
+  display:inline;
+}
+
+.retryText{
+  position:relative;
+  left:830px;
+  bottom:520px;
+}
+
+.img3{
+  position:relative;
+  left:410;
+  bottom:110;
+  width:70;
+  pointer-events:none;
+}
+
+.img3:hover .hoverArrow3{
+  display:inline;
+}
+
+.arrow3{
+  width:105px;
+  height:auto;
+}
+
+.hoverArrow3{
+  position:absolute;
+  top:0;
+  left:0;
+  width:105px;
+  height:auto;
+  display:none;
+}
+
+.downloadText{
+  position:relative;
+  left:1130px;
+  bottom:540px;
+}
+
+.checkmark{
+  width:30px;
+  height:auto;
+}
+
+#check1{
+  position:relative;
+  left:930px;
+  bottom:1040px;
+  visibility: hidden;
+}
+
+#check2{
+  position:relative;
+  left:903px;
+  bottom:840px;
+  visibility: hidden;
+}
+
+.cross{
+  width:30px;
+  height:auto;
+}
+
+#cross1{
+  position:relative;
+  left:930px;
+  bottom:1074px;
+  visibility:hidden;
+}
+
+#cross2{
+  position:relative;
+  left:902px;
+  bottom:872px;
+  visibility: hidden;
+}
+
+.made-by{
+  position:relative;
+  top:145px;
+  font-size:14px;
+}
+
+#help-area{
+  position:relative;
+  bottom:90px;
+  width:20px;
+  cursor:pointer;
+}
+
+.question-mark{
+  width:25px;
+  height:auto;
+}
+
+#help-text{
+  position:relative;
+  font-size:14px;
+  left:31px;
+  bottom:18px;
+}
+
+#help-box{
+  position:relative;
+  width:550px;
+  height:500px;
+  bottom:1122px;
+  background-color: #fdfdff;
+  border: thin solid black;
+  border-width: 1.5px;
+  display:none;
+  padding:10px;
+}
+
+#close-button{
+  position:relative;
+  left:555px;
+  cursor:pointer;
+  background-color: white;
+}
+
+h3{
+  position:relative;
+  bottom:18px;
+}
+
+#help-area-2{
+  position:relative;
+  bottom:820px;
+  left: 180px;
+  width:50px;
+  cursor:pointer;
+}
+
+.question-mark-2{
+  width:25px;
+  height:auto;
+}
+
+#help-text-2{
+  position:relative;
+  font-size:14px;
+  left:31px;
+  bottom:20px;
+  white-space: nowrap;
+}
+
+#help-box-2{
+  position:relative;
+  width:550px;
+  height:500px;
+  bottom:1162px;
+  background-color: #fdfdff;
+  border: thin solid black;
+  border-width: 1.5px;
+  display:none;
+  padding:10px;
+}
+
+#close-button-2{
+  position:relative;
+  left:555px;
+  cursor:pointer;
+  background-color: white;
+}
+
+.list{
+  position:relative;
+  left:40px;
+  width:450px;
+}
+
+#invalid-text{
+  position:relative;
+  bottom:790px;
+  width:485px;
+  font-size: 17px;
+  font-weight:600;
+  color:#F51414;
+  display:none;
+}
