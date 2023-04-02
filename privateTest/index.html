@@ -1,0 +1,147 @@
+<head>
+  <link rel="stylesheet" href="index.css">
+  <title> CPS Checker </title>
+</head>
+<body>
+  <main>
+  <div class="title">
+    <h1>CPS Checker</h1>
+  </div>
+  <div class="description">
+    <p>This site allows you to check if a macro breaks CPS rules as defined in the ILL rules document.<br>
+      <p2 id="second-line">
+        <b>Note:</b> just because a macro violates CPS rules, doesn't necessarily mean the level does.
+      </p2> 
+    </p>
+  </div>
+  <div class="inputBox" id="ib">
+    <div class="inputBoxInner">
+    <div>
+      <label id="upload" class="uploadButton">
+        <input type="file" id="in" accept=".txt"/>
+        Upload file
+        </label>
+    </div>
+    <div class="pasteText">
+      <p>
+      or paste text:
+      </p>
+    </div>
+    <textArea id="textbox" class="pasteArea" autofocus>
+    </textArea>
+    <div id="noFile" class="noFileText">
+      <p>
+        No file selected
+      </p>
+    </div>
+  </div>
+  <div class="img" id="checkButton">
+    <img class="arrow" src="./img/arrow.png" alt="Arrow">
+    <img class="hoverArrow" src="./img/arrowHover.png" alt="ArrowHovered">
+  </div>
+  <p class="submitText">
+    Check CPS
+  </p>
+  <p class="made-by">
+    Made by EDSJustin with help from Flora
+  </p>
+  <div id="help-area">
+    <img class="question-mark" id="question1" src="./img/help.png" alt="help">
+    <p id="help-text">
+      Help
+    </p>
+  </div>
+  <div id="help-area-2">
+    <img class="question-mark" id="question2" src="./img/help.png" alt="help2">
+    <p id="help-text-2">
+      CPS rules
+    </p>
+  </div>
+    </div>
+    <div id="output" class="outputBox">
+      <textArea id="outbox1" class="outArea1" readonly>
+      </textArea>
+      <p class="p1results">
+        Player 1 CPS violations:
+      </p>
+      <textArea id="outbox2" class="outArea2" readonly>
+      </textArea>
+      <p class="p2results">
+        Player 2 CPS violations:
+      </p>
+      <div class="img2" id="refreshButton">
+        <img class="arrow" src="./img/arrow2.png" alt="Arrow2">
+        <img class="hoverArrow" src="./img/arrow2Hover.png" alt="Arrow2Hovered">
+      </div>
+      <div class="img3" id="downloadButton">
+        <img class="arrow3" src="./img/arrow3.png" alt="Arrow3">
+        <img class="hoverArrow3" src="./img/arrow3Hover.png" alt="Arrow3Hovered">
+      </div>
+    </div>
+      <h2>
+        Results
+      </h2>
+    <p class="retryText">
+      Check another macro
+    </p>
+    <p class="downloadText">
+      Download results
+    </p>
+    <div>
+      <img class="checkmark" id="check1" src="./img/check.png" alt="check">
+      <img class="checkmark" id="check2" src="./img/check.png" alt="check2">
+    </div>
+    <div>
+      <img class="cross" id="cross1" src="./img/cross.png" alt="cross">
+      <img class="cross" id="cross2" src="./img/cross.png" alt="cross2">
+    </div>
+    <div id="help-box" data-closeable>
+      <button id="close-button" data-close>
+        <span> &#10006; </span>
+      </button>
+      <h3>
+        Upload format
+      </h3>
+      <p1 class="p1">
+        This tool requires macros to be in plain text form. An example of acceptable
+         form is:<br><br>60<br>28 1 0<br>58 1 0<br>72 1 0<br>104 1 0<br>148 1 0<br>
+         172 1 0<br>202 1 0<br>264 1 0<br>. . .<br>
+      </p1>
+      <p2 class="p2">
+        <br>You can convert a macro to plain text using 
+        <a href="https://matcool.github.io/gd-macro-converter/">
+          mat's macro converter.
+        </a>
+      </p2>
+    </div>
+    <div id="help-box-2" data-closeable>
+      <button id="close-button-2" data-close>
+        <span> &#10006; </span>
+      </button>
+      <h3>
+        ILL CPS Rules
+      </h3>
+      <p1 class="p1">
+        The level must not include sections where clicks per second would exceed:<br><br>
+        <ul class="list">
+          <li style="padding-bottom:5px">15 clicks in a second.</li>
+          <li style="padding-bottom:5px">18 clicks per second rate in any 1/3rd of a second to 1 second.</li>
+          <li style="padding-bottom:5px">20 clicks per second rate in any stint of more than 3 clicks and shorter
+            than 1/3rd of a second.</li>
+        </ul>
+      </p1>
+      <p2 class="p2">
+        <br><br>This program checks if the above rules are satisfied for both players in a macro.
+        <br><br>If they're not, it will tell you what frames the violations occur at.
+      </p2>
+    </div>
+    <p id="invalid-text">
+      An error occured while parsing the macro. Please make sure your macro follows the required format.
+    </p>
+    <p id="fps-text">
+      FPS: N/A
+    </p>
+  </main>
+  <script
+    src="./index.js"></script>
+</body>
