@@ -217,7 +217,7 @@ function verifyRule2(inputFrames, breakArray){
         }
         var timeBetweenClicks = parseFloat(earliestClick-firstClickFrame)/framerate;
         var cps = (numClicks-1)/timeBetweenClicks;
-        if(numClicks > 3 && cps > 18 && timeBetweenClicks < 1){
+        if(numClicks > 3 && cps > 18 && timeBetweenClicks >= parseFloat(1/3) && timeBetweenClicks < 1 ){
             violationNo ++;
             if(violationNo == 1){
                 breakArray.push('Rule 2 violations:\n');
@@ -246,7 +246,7 @@ function verifyRule3(inputFrames, breakArray){
         }
         var timeBetweenClicks = parseFloat(lastClickWithinTime-firstClickFrame)/framerate;
         var cps = (numClicks-1)/timeBetweenClicks;
-        if(numClicks > 3 && cps > 20){
+        if(numClicks == 4 && cps > 20){
             violationNo ++;
             if(violationNo == 1){
                 breakArray.push('Rule 3 violations:\n');
