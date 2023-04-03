@@ -154,14 +154,12 @@ function disable(){
 
 function checkP1CpsBreaks(){
     verifyRule1(p1InputArray, p1Rule1Breaks);
-    verifyRule2(p1InputArray, p1Rule2Breaks);
-    verifyRule3(p1InputArray, p1Rule3Breaks);
+    verifyRule2And3(p1InputArray, p1Rule2Breaks, p1Rule3Breaks);
 }
 
-function checkP2CpsBreaks(){
-    verifyRule1(p2InputArray, p2Rule1Breaks);
-    verifyRule2(p2InputArray, p2Rule2Breaks);
-    verifyRule3(p2InputArray, p2Rule3Breaks);
+function checkP2CpsBreaks(){ //P2 input parsing is incorrect
+    //verifyRule1(p2InputArray, p2Rule1Breaks);
+    //verifyRule2And3(p2InputArray, p2Rule2Breaks, p2Rule3Breaks);
 }
 
 function verifyRule1(inputFrames, breakArray){
@@ -197,104 +195,66 @@ function verifyRule1(inputFrames, breakArray){
     }
 } 
 
-
-function verifyRule2(inputFrames, breakArray){
-    var violationNo = 0;
-    for(var i = 0; i + 3 < inputFrames.length; i++){
-        let firstClick = inputFrames[i];
-        let lastClick = inputFrames[i + 3];
-        let framesBetweenClicks = lastClick - firstClick;
-        let timeBetweenClicks = parseFloat(framesBetweenClicks) / framerate;
-        let cps = (3)/timeBetweenClicks;
-        if(cps > 18 && timeBetweenClicks >= parseFloat(1/3) && timeBetweenClicks < 1){
-            violationNo ++;
-            if(violationNo == 1){
-                breakArray.push('Rule 2 violations:\n');
-            }
-            breakArray.push('- ' + cps.toFixed(3) + " cps rate for the " + 4 + " click stint from " 
-            + firstClick + " to " + lastClick + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
-        }
-    }
-}
-
-/* function verifyRule2(inputFrames, breakArray){
-    var violationNo = 0;
+ function verifyRule2And3(inputFrames, breakArrayRule2, breakArrayRule3){
+    var r2ViolationNo = 0;
+    var r3ViolationNo = 0;
     for(var i = 0; i < inputFrames.length; i++){
+        inputFramesWithinASecond = [];
         var firstClickFrame = inputFrames[i];
-        var frameThirdOfASecondLater = firstClickFrame + parseFloat(framerate)/3;
-        var numClicks = 0;
-        var earliestClick = firstClickFrame;
+        var frameOneSecondLater = firstClickFrame + framerate;
+        var latestClick = firstClickFrame;
         for(var j = 0; j < inputFrames.length; j++){
-            if(inputFrames[i + j] < frameThirdOfASecondLater){
-                earliestClick = inputFrames[i + j];
-                numClicks ++;
+            if(inputFrames[i + j] < frameOneSecondLater){
+                latestClick = inputFrames[i + j];
+                inputFramesWithinASecond.push(inputFrames[i + j]);
             }
-            else if(inputFrames[i + j] >= frameThirdOfASecondLater){
-                earliestClick = inputFrames[i + j];
-                numClicks ++;
+            else{
                 break;
             }
         }
-        var timeBetweenClicks = parseFloat(earliestClick-firstClickFrame)/framerate;
-        var cps = (numClicks-1)/timeBetweenClicks;
-        if(numClicks > 3 && cps > 18 && timeBetweenClicks >= parseFloat(1/3) && timeBetweenClicks < 1 ){
-            violationNo ++;
-            if(violationNo == 1){
-                breakArray.push('Rule 2 violations:\n');
+        if(inputFramesWithinASecond.length < 4){ continue; }
+        console.log(inputFramesWithinASecond);
+        console.log('Cps calculated between frames:')
+        for(var j = 1; j < inputFramesWithinASecond.length; j++){
+            var numClicks = j+1;
+            if(j < 3){ continue; }
+            var framesBetweenClicks = inputFramesWithinASecond[j] - firstClickFrame;
+            var timeBetweenClicks = parseFloat(framesBetweenClicks)/framerate;
+            console.log(firstClickFrame + " and " + inputFramesWithinASecond[j]);
+            var cps = j/timeBetweenClicks;
+            
+            if(cps > 18){ //Candidate break
+                if(cps > 20 && timeBetweenClicks < parseFloat(1)/3){
+                    r3ViolationNo++;
+                    if(r3ViolationNo == 1){
+                        breakArrayRule3.push('Rule 3 violations:\n');
+                    }
+                    breakArrayRule3.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
+                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
+                }
+                else if(cps > 20 && timeBetweenClicks >= parseFloat(1)/3){
+                    r2ViolationNo++;
+                    if(r2ViolationNo == 1){
+                        breakArrayRule2.push('Rule 2 violations:\n');
+                    }
+                    breakArrayRule2.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
+                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
+                }
+                else if(cps <= 20 && timeBetweenClicks >= parseFloat(1)/3){
+                    r2ViolationNo++;
+                    if(r2ViolationNo == 1){
+                        breakArrayRule2.push('Rule 2 violations:\n');
+                    }
+                    breakArrayRule2.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
+                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
+                }
+                else if(cps <= 20 && timeBetweenClicks < parseFloat(1)/3){
+                    continue;
+                }
             }
-            breakArray.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
-            + firstClickFrame + " to " + earliestClick + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
         }
     }
-} */
-
-function verifyRule3(inputFrames, breakArray){
-    var violationNo = 0;
-    for(var i = 0; i + 3 < inputFrames.length; i++){
-        let firstClick = inputFrames[i];
-        let lastClick = inputFrames[i + 3];
-        let framesBetweenClicks = lastClick - firstClick;
-        let timeBetweenClicks = parseFloat(framesBetweenClicks) / framerate;
-        let cps = (3)/timeBetweenClicks;
-        if(cps > 20 && timeBetweenClicks < parseFloat(1/3)){
-            violationNo ++;
-            if(violationNo == 1){
-                breakArray.push('Rule 3 violations:\n');
-            }
-            breakArray.push('- ' + cps.toFixed(3) + " cps rate for the " + 4 + " click stint from " 
-            + firstClick + " to " + lastClick + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
-        }
-    }
-}
-
-/* function verifyRule3(inputFrames, breakArray){
-    var violationNo = 0;
-    for(var i = 0; i < inputFrames.length; i++){
-        var firstClickFrame = inputFrames[i];
-        var frameThirdOfASecondLater = firstClickFrame + parseFloat(framerate)/3;
-        var numClicks = 0;
-        var lastClickWithinTime = firstClickFrame;
-        for(var j = 0; j < inputFrames.length; j++){
-            if(inputFrames[i + j] < frameThirdOfASecondLater){
-                lastClickWithinTime = inputFrames[i + j];
-                numClicks ++;
-            }
-            else if(inputFrames[i + j] >= frameThirdOfASecondLater){
-                break;
-            }
-        }
-        var timeBetweenClicks = parseFloat(lastClickWithinTime-firstClickFrame)/framerate;
-        var cps = (numClicks-1)/timeBetweenClicks;
-        if(numClicks == 4 && cps > 20){
-            violationNo ++;
-            if(violationNo == 1){
-                breakArray.push('Rule 3 violations:\n');
-            }
-            breakArray.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
-            + firstClickFrame + " to " + lastClickWithinTime + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
-        }
-    }
-} */
+} 
 
 function validMacro(macro){
     const arrayOfLines = macro.trim().split('\n');
