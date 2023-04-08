@@ -382,3 +382,16 @@ h3{
   word-break: break-all;
   display: none;
 }
+
+#culling{
+  position:relative;
+  left:5px;
+  width:70px;
+}
+
+#cull{
+  position:relative;
+  bottom:400px;
+  left:460px;
+  display: none;
+}

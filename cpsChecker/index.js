@@ -1,7 +1,23 @@
 var p1InputArray = [];
 var p2InputArray = [];
-var p1breaks = [];
-var p2breaks = [];
+
+var p1Rule1Breaks = [];
+var p2Rule1Breaks = [];
+var p1Rule2Breaks = [];
+var p2Rule2Breaks = [];
+var p1Rule3Breaks = [];
+var p2Rule3Breaks = [];
+
+var p1Rule2MaxCull = [];
+var p2Rule2MaxCull = [];
+var p1Rule3MaxCull = [];
+var p2Rule3MaxCull = [];
+
+var p1Rule2MinCull = [];
+var p2Rule2MinCull = [];
+var p1Rule3MinCull = [];
+var p2Rule3MinCull = [];
+
 var framerate;
 var macroName = '<not provided>';
 
@@ -21,8 +37,12 @@ document.getElementById('checkButton').addEventListener('click', async () =>{
     }
     document.getElementById('invalid-text').style.display = 'none';
 
-    parseP1InputsToArray(macroTxt);
-    parseP2InputsToArray(macroTxt);
+    parseInputsToP1P2Array(macroTxt);
+
+    document.getElementById('fps-text').textContent = 'FPS: ' + framerate;
+    document.getElementById('fps-text').style.display = 'block';
+    document.getElementById('fps-text').style.fontWeight = 'bold';
+    document.getElementById('cull').style.display = 'block';
 
     checkP1CpsBreaks();
     checkP2CpsBreaks();
@@ -38,22 +58,15 @@ document.getElementById('checkButton').addEventListener('click', async () =>{
 document.getElementById('downloadButton').addEventListener('click', async () =>{
     var resultString = 'Macro name:\n' + macroName +'\n';
     resultString += '\nFPS:\n' + framerate +'\n';
-    resultString += '\nPlayer 1 CPS breaks:\n';
-    if(p1breaks.length == 0){
-        resultString += 'None\n';
-    }
-    else{
-        const content1 = document.getElementById('outbox1').value;
-        resultString += content1;
-    }
-    resultString += '\nPlayer 2 CPS breaks:\n';
-    if(p2breaks.length == 0){
-        resultString += 'None\n';
-    }
-    else{
-        const content2 = document.getElementById('outbox2').value;
-        resultString += content2;
-    }
+    resultString += '\nCulling:\n' + document.getElementById('culling').value +'\n\n';
+
+    resultString += '** Player 1 CPS Violations: **\n';
+    const content1 = document.getElementById('outbox1').value;
+    resultString += content1;
+
+    resultString += '\n\n** Player 2 CPS Violations: **\n';
+    const content2 = document.getElementById('outbox2').value;
+    resultString += content2;
     
     const link = document.createElement("a");
     const file = new Blob([resultString], { type: 'text/plain' });
@@ -68,26 +81,87 @@ document.getElementById('refreshButton').addEventListener('click', async () =>{
 });
 
 function reportP1Results(){
-    if(p1breaks.length == 0){
-        document.getElementById('outbox1').value = "\n\n<< Player 1 does not break CPS rules! >>";
+    document.getElementById('outbox1').value = '';
+    if(p1Rule1Breaks.length == 0 && p1Rule2Breaks.length == 0
+        && p1Rule3Breaks.length == 0){
         document.getElementById('check1').style.visibility = 'visible';
+        document.getElementById('outbox1').value = "Rule 1 violations:\n[none]\n\n";
+        document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 2 violations:\n[none]\n\n";
+        document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 3 violations:\n[none]";
     }
     else{
-        for(var i = 0; i < p1breaks.length; i++){
-            document.getElementById('outbox1').value = document.getElementById('outbox1').value + p1breaks[i];
+        if(p1Rule1Breaks.length == 0){
+            document.getElementById('outbox1').value = "Rule 1 violations:\n[none]\n\n";
+        }
+        else{
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 1 violations:\n";
+            for(var i = 0; i < p1Rule1Breaks.length; i++){
+                document.getElementById('outbox1').value = document.getElementById('outbox1').value + p1Rule1Breaks[i];
+            }
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "\n";
+        }
+        if(p1Rule2Breaks.length == 0){
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 2 violations:\n[none]\n\n";
+        }
+        else{
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 2 violations:\n";
+            for(var i = 0; i < p1Rule2Breaks.length; i++){
+                document.getElementById('outbox1').value = document.getElementById('outbox1').value + p1Rule2Breaks[i];
+            }
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "\n";
+        }
+        if(p1Rule3Breaks.length == 0){
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 3 violations:\n[none]";
+        }
+        else{
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 3 violations:\n";
+            for(var i = 0; i < p1Rule3Breaks.length; i++){
+                document.getElementById('outbox1').value = document.getElementById('outbox1').value + p1Rule3Breaks[i];
+            }
         }
         document.getElementById('cross1').style.visibility = 'visible';
     }
 }
 
 function reportP2Results(){
-    if(p2breaks.length == 0){
-        document.getElementById('outbox2').value = "\n\n<< Player 2 does not break CPS rules! >>";
+    document.getElementById('outbox2').value = '';
+    if(p2Rule1Breaks.length == 0 && p2Rule2Breaks.length == 0
+        && p2Rule3Breaks.length == 0){
         document.getElementById('check2').style.visibility = 'visible';
+        document.getElementById('outbox2').value = "Rule 1 violations:\n[none]\n\n";
+        document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 2 violations:\n[none]\n\n";
+        document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 3 violations:\n[none]";
     }
     else{
-        for(var i = 0; i < p2breaks.length; i++){
-            document.getElementById('outbox2').value = document.getElementById('outbox2').value + p2breaks[i];
+        if(p2Rule1Breaks.length == 0){
+            document.getElementById('outbox2').value = "Rule 1 violations:\n[none]\n\n";
+        }
+        else{
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 1 violations:\n";
+            for(var i = 0; i < p2Rule1Breaks.length; i++){
+                document.getElementById('outbox2').value = document.getElementById('outbox2').value + p2Rule1Breaks[i];
+            }
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "\n";
+        }
+        if(p2Rule2Breaks.length == 0){
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 2 violations:\n[none]\n\n";
+        }
+        else{
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 2 violations:\n";
+            for(var i = 0; i < p2Rule2Breaks.length; i++){
+                document.getElementById('outbox2').value = document.getElementById('outbox2').value + p2Rule2Breaks[i];
+            }
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "\n";
+        }
+        if(p2Rule3Breaks.length == 0){
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value +"Rule 3 violations:\n[none]";
+        }
+        else{
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 3 violations:\n";
+            for(var i = 0; i < p2Rule3Breaks.length; i++){
+                document.getElementById('outbox2').value = document.getElementById('outbox2').value + p2Rule3Breaks[i];
+            }
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "\n";
         }
         document.getElementById('cross2').style.visibility = 'visible';
     }
@@ -100,54 +174,132 @@ function disable(){
 }
 
 function checkP1CpsBreaks(){
-    verifyCps(p1InputArray, p1breaks, 15, "1");
-	verifyCps(p1InputArray, p1breaks, 14, "7/9");
-	verifyCps(p1InputArray, p1breaks, 13, "13/18");
-	verifyCps(p1InputArray, p1breaks, 12, "2/3");
-	verifyCps(p1InputArray, p1breaks, 11, "11/18");
-	verifyCps(p1InputArray, p1breaks, 10, "5/9");
-	verifyCps(p1InputArray, p1breaks, 9, "1/2");
-	verifyCps(p1InputArray, p1breaks, 8, "4/9");
-	verifyCps(p1InputArray, p1breaks, 7, "7/18");
-	verifyCps(p1InputArray, p1breaks, 6, "3/10");
-	verifyCps(p1InputArray, p1breaks, 5, "1/4");
-	verifyCps(p1InputArray, p1breaks, 4, "1/5");
+    derive(p1InputArray, p1Rule1Breaks);
+    Derive(p1InputArray, p1Rule2Breaks, p1Rule3Breaks, p1Rule2MaxCull, 
+        p1Rule3MaxCull, p1Rule2MinCull, p1Rule3MinCull);
 }
 
-function checkP2CpsBreaks(){
-    verifyCps(p2InputArray, p2breaks, 15, "1");
-	verifyCps(p2InputArray, p2breaks, 14, "7/9");
-	verifyCps(p2InputArray, p2breaks, 13, "13/18");
-	verifyCps(p2InputArray, p2breaks, 12, "2/3");
-	verifyCps(p2InputArray, p2breaks, 11, "11/18");
-	verifyCps(p2InputArray, p2breaks, 10, "5/9");
-	verifyCps(p2InputArray, p2breaks, 9, "1/2");
-	verifyCps(p2InputArray, p2breaks, 8, "4/9");
-	verifyCps(p2InputArray, p2breaks, 7, "7/18");
-	verifyCps(p2InputArray, p2breaks, 6, "3/10");
-	verifyCps(p2InputArray, p2breaks, 5, "1/4");
-	verifyCps(p2InputArray, p2breaks, 4, "1/5");
+function checkP2CpsBreaks(){ 
+    derive(p2InputArray, p2Rule1Breaks);
+    Derive(p2InputArray, p2Rule2Breaks, p2Rule3Breaks, p2Rule2MaxCull, 
+        p2Rule3MaxCull, p2Rule2MinCull, p2Rule3MinCull);
 }
 
-function verifyCps(inputFrames, breakArray, numOfClicks, minTimeS){
-    if(minTimeS !== '1'){
-        var ratio = minTimeS.split('/');
-        var minTimeF = parseFloat(ratio[0]) / parseFloat(ratio[1]);
-    }
-    else{
-        minTimeF = parseFloat(minTimeS);
-    }
-    for(var i = 0; i + (numOfClicks-1) < inputFrames.length; i++){
-        let firstClick = inputFrames[i];
-        let lastClick = inputFrames[i + (numOfClicks-1)];
-        let framesBetweenClicks = lastClick - firstClick;
-        let timeBetweenClicks = parseFloat(framesBetweenClicks) / framerate;
-        if(timeBetweenClicks <= minTimeF){
-            breakArray.push("- " + numOfClicks + " clicks within " + minTimeS + " second: " + timeBetweenClicks.toFixed(4) + 
-            "s between frames " + firstClick + " and " + lastClick + "\n");
+function derive(inputFrames, breakArray){
+    for(var i = 0; i < inputFrames.length; i++){
+        var firstClickFrame = inputFrames[i];
+        var frameOneSecondLater = firstClickFrame + framerate;
+        var numClicks = 0;
+        var lastClickWithinTime = firstClickFrame;
+        for(var j = 0; j < inputFrames.length; j++){
+            if(inputFrames[i + j] < frameOneSecondLater){
+                lastClickWithinTime = inputFrames[i + j];
+                numClicks ++;
+            }
+            else if(inputFrames[i + j] > frameOneSecondLater){
+                break;
+            }
+            else if(inputFrames[i + j] == frameOneSecondLater){
+                lastClickWithinTime = inputFrames[i + j];
+                numClicks++;
+                break;
+            }
+        }
+        var timeBetween = parseFloat((lastClickWithinTime-firstClickFrame))/framerate;
+        if(numClicks > 15){
+            breakArray.push("- " + numClicks + " clicks in 1s: [frame " + firstClickFrame+" to "+ frameOneSecondLater+
+            "]: (" + timeBetween.toFixed(3) + "s between first and last)\n");
         }
     }
-}
+} 
+
+ function Derive(inputFrames, breakArrayRule2, breakArrayRule3, rule2Max, rule3Max, rule2Min, rule3Min){
+    for(var i = 0; i < inputFrames.length; i++){
+        var min = true;
+        var max = false;
+        var _2break = false, _3break = false;
+        inputFramesWithinASecond = [];
+        var firstClickFrame = inputFrames[i];
+        var frameOneSecondLater = firstClickFrame + framerate;
+        var latestClick = firstClickFrame;
+        for(var j = 0; j < inputFrames.length; j++){
+            if(inputFrames[i + j] < frameOneSecondLater){
+                latestClick = inputFrames[i + j];
+                inputFramesWithinASecond.push(inputFrames[i + j]);
+            }
+            else{
+                break;
+            }
+        }
+        if(inputFramesWithinASecond.length < 4){ continue; }
+        for(var j = 1; j < inputFramesWithinASecond.length; j++){
+            var numClicks = j+1;
+            if(j < 3){ continue; }
+            var framesBetweenClicks = inputFramesWithinASecond[j] - firstClickFrame;
+            var timeBetweenClicks = parseFloat(framesBetweenClicks)/framerate;
+            var cps = j/timeBetweenClicks;
+            
+            if(cps > 18){ //Candidate break
+                if(cps > 20 && timeBetweenClicks < parseFloat(1)/3){
+                    if(min == true){
+                        rule3Min.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
+                        + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
+                    }
+                    breakArrayRule3.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
+                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
+
+                    maxString = '- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
+                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n";
+                    _3break = true;
+                    _2break = false;
+                    max = true;
+                    min = false;
+                }
+                else if(cps > 20 && timeBetweenClicks >= parseFloat(1)/3){
+                    if(min == true){
+                        rule2Min.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
+                        + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
+                    }
+                    breakArrayRule2.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
+                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
+
+                    maxString = '- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
+                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n";
+                    _3break = false;
+                    _2break = true;
+                    max = true;
+                    min = false;
+                }
+                else if(cps <= 20 && timeBetweenClicks >= parseFloat(1)/3){
+                    if(min == true){
+                        rule2Min.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
+                        + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
+                    }
+                    breakArrayRule2.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
+                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
+
+                    maxString = '- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
+                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n";
+                    _3break = false;
+                    _2break = true;
+                    max = true;
+                    min = false;
+                }
+                else if(cps <= 20 && timeBetweenClicks < parseFloat(1)/3){
+                    continue;
+                }
+            }
+        }
+        if(max == true){
+            if(_2break == true){
+                rule2Max.push(maxString);
+            }
+            else if(_3break == true){
+                rule3Max.push(maxString);
+            }
+        }
+    }
+} 
 
 function validMacro(macro){
     const arrayOfLines = macro.trim().split('\n');
@@ -174,7 +326,7 @@ function isANumber(str){
     return !/\D/.test(str);
   }
 
-function parseP1InputsToArray(macroTxt){
+function parseInputsToP1P2Array(macroTxt){
     const lineArray = macroTxt.trim().split('\n');
     for(var i = 0; i < lineArray.length; i++){
         var lineAsInts1 = lineArray[i].trim().split(/(\s+)/);
@@ -183,22 +335,10 @@ function parseP1InputsToArray(macroTxt){
             framerate = parseInt(lineAsInts, 10);
             continue;
         }
-        if(parseInt(lineAsInts[1],10) == 1){
+        if(parseInt(lineAsInts[1],10) == 1 && parseInt(lineAsInts[2]) == 0){ //P1 input
             p1InputArray.push(parseInt(lineAsInts[0],10));
         }
-    }
-}
-
-function parseP2InputsToArray(macroTxt){
-    const lineArray = macroTxt.trim().split('\n');
-    for(var i = 0; i < lineArray.length; i++){
-        var lineAsInts1 = lineArray[i].trim().split(/(\s+)/);
-        var lineAsInts= lineAsInts1.filter(n => isANumber(n));
-        if(i == 0){
-            framerate = parseInt(lineAsInts, 10);
-            continue;
-        }
-        if(parseInt(lineAsInts[2],10) == 1){
+        else if(parseInt(lineAsInts[1],10) == 1 && parseInt(lineAsInts[2]) == 1){ //P2 input
             p2InputArray.push(parseInt(lineAsInts[0],10));
         }
     }
@@ -232,3 +372,192 @@ document.getElementById('help-area-2').addEventListener('click', async () =>{
 document.getElementById('close-button-2').addEventListener('click', async () =>{
     document.getElementById('help-box-2').style.display='none';
 });
+
+document.getElementById('culling').addEventListener('change', async () =>{
+    if(document.getElementById('culling').value === 'Min'){
+        reportP1MinResults();
+        reportP2MinResults();
+    }
+    else if(document.getElementById('culling').value === 'Max'){
+        reportP1MaxResults();
+        reportP2MaxResults();
+    }
+    else{
+        reportP1Results();
+        reportP2Results();
+    }
+});
+
+function reportP1MinResults(){
+    document.getElementById('outbox1').value = '';
+    if(p1Rule1Breaks.length == 0 && p1Rule2MinCull.length == 0
+        && p1Rule3MinCull.length == 0){
+        document.getElementById('check1').style.visibility = 'visible';
+        document.getElementById('outbox1').value = "Rule 1 violations:\n[none]\n\n";
+        document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 2 violations:\n[none]\n\n";
+        document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 3 violations:\n[none]";
+    }
+    else{
+        if(p1Rule1Breaks.length == 0){
+            document.getElementById('outbox1').value = "Rule 1 violations:\n[none]\n\n";
+        }
+        else{
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 1 violations:\n";
+            for(var i = 0; i < p1Rule1Breaks.length; i++){
+                document.getElementById('outbox1').value = document.getElementById('outbox1').value + p1Rule1Breaks[i];
+            }
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "\n";
+        }
+        if(p1Rule2MinCull.length == 0){
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 2 violations:\n[none]\n\n";
+        }
+        else{
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 2 violations:\n";
+            for(var i = 0; i < p1Rule2MinCull.length; i++){
+                document.getElementById('outbox1').value = document.getElementById('outbox1').value + p1Rule2MinCull[i];
+            }
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "\n";
+        }
+        if(p1Rule3MinCull.length == 0){
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 3 violations:\n[none]";
+        }
+        else{
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 3 violations:\n";
+            for(var i = 0; i < p1Rule3MinCull.length; i++){
+                document.getElementById('outbox1').value = document.getElementById('outbox1').value + p1Rule3MinCull[i];
+            }
+        }
+        document.getElementById('cross1').style.visibility = 'visible';
+    }
+}
+
+function reportP2MinResults(){
+    document.getElementById('outbox2').value = '';
+    if(p2Rule1Breaks.length == 0 && p2Rule2Breaks.length == 0
+        && p2Rule3Breaks.length == 0){
+        document.getElementById('check2').style.visibility = 'visible';
+        document.getElementById('outbox2').value = "Rule 1 violations:\n[none]\n\n";
+        document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 2 violations:\n[none]\n\n";
+        document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 3 violations:\n[none]";
+    }
+    else{
+        if(p2Rule1Breaks.length == 0){
+            document.getElementById('outbox2').value = "Rule 1 violations:\n[none]\n\n";
+        }
+        else{
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 1 violations:\n";
+            for(var i = 0; i < p2Rule1Breaks.length; i++){
+                document.getElementById('outbox2').value = document.getElementById('outbox2').value + p2Rule1Breaks[i];
+            }
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "\n";
+        }
+        if(p2Rule2MinCull.length == 0){
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 2 violations:\n[none]\n\n";
+        }
+        else{
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 2 violations:\n";
+            for(var i = 0; i < p2Rule2MinCull.length; i++){
+                document.getElementById('outbox2').value = document.getElementById('outbox2').value + p2Rule2MinCull[i];
+            }
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "\n";
+        }
+        if(p2Rule3MinCull.length == 0){
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value +"Rule 3 violations:\n[none]";
+        }
+        else{
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 3 violations:\n";
+            for(var i = 0; i < p2Rule3MinCull.length; i++){
+                document.getElementById('outbox2').value = document.getElementById('outbox2').value + p2Rule3MinCull[i];
+            }
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "\n";
+        }
+        document.getElementById('cross2').style.visibility = 'visible';
+    }
+}
+
+function reportP1MaxResults(){
+    document.getElementById('outbox1').value = '';
+    if(p1Rule1Breaks.length == 0 && p1Rule2MaxCull.length == 0
+        && p1Rule3MaxCull.length == 0){
+        document.getElementById('check1').style.visibility = 'visible';
+        document.getElementById('outbox1').value = "Rule 1 violations:\n[none]\n\n";
+        document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 2 violations:\n[none]\n\n";
+        document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 3 violations:\n[none]";
+    }
+    else{
+        if(p1Rule1Breaks.length == 0){
+            document.getElementById('outbox1').value = "Rule 1 violations:\n[none]\n\n";
+        }
+        else{
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 1 violations:\n";
+            for(var i = 0; i < p1Rule1Breaks.length; i++){
+                document.getElementById('outbox1').value = document.getElementById('outbox1').value + p1Rule1Breaks[i];
+            }
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "\n";
+        }
+        if(p1Rule2MaxCull.length == 0){
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 2 violations:\n[none]\n\n";
+        }
+        else{
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 2 violations:\n";
+            for(var i = 0; i < p1Rule2MaxCull.length; i++){
+                document.getElementById('outbox1').value = document.getElementById('outbox1').value + p1Rule2MaxCull[i];
+            }
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "\n";
+        }
+        if(p1Rule3MaxCull.length == 0){
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 3 violations:\n[none]";
+        }
+        else{
+            document.getElementById('outbox1').value = document.getElementById('outbox1').value + "Rule 3 violations:\n";
+            for(var i = 0; i < p1Rule3MaxCull.length; i++){
+                document.getElementById('outbox1').value = document.getElementById('outbox1').value + p1Rule3MaxCull[i];
+            }
+        }
+        document.getElementById('cross1').style.visibility = 'visible';
+    }
+}
+
+function reportP2MaxResults(){
+    document.getElementById('outbox2').value = '';
+    if(p2Rule1Breaks.length == 0 && p2Rule2MaxCull.length == 0
+        && p2Rule3MaxCull.length == 0){
+        document.getElementById('check2').style.visibility = 'visible';
+        document.getElementById('outbox2').value = "Rule 1 violations:\n[none]\n\n";
+        document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 2 violations:\n[none]\n\n";
+        document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 3 violations:\n[none]";
+    }
+    else{
+        if(p2Rule1Breaks.length == 0){
+            document.getElementById('outbox2').value = "Rule 1 violations:\n[none]\n\n";
+        }
+        else{
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 1 violations:\n";
+            for(var i = 0; i < p2Rule1Breaks.length; i++){
+                document.getElementById('outbox2').value = document.getElementById('outbox2').value + p2Rule1Breaks[i];
+            }
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "\n";
+        }
+        if(p2Rule2MaxCull.length == 0){
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 2 violations:\n[none]\n\n";
+        }
+        else{
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 2 violations:\n";
+            for(var i = 0; i < p2Rule2MaxCull.length; i++){
+                document.getElementById('outbox2').value = document.getElementById('outbox2').value + p2Rule2MaxCull[i];
+            }
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "\n";
+        }
+        if(p2Rule3MaxCull.length == 0){
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value +"Rule 3 violations:\n[none]";
+        }
+        else{
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "Rule 3 violations:\n";
+            for(var i = 0; i < p2Rule3MaxCull.length; i++){
+                document.getElementById('outbox2').value = document.getElementById('outbox2').value + p2Rule3MaxCull[i];
+            }
+            document.getElementById('outbox2').value = document.getElementById('outbox2').value + "\n";
+        }
+        document.getElementById('cross2').style.visibility = 'visible';
+    }
+}

@@ -8,7 +8,11 @@
     <h1>CPS Checker</h1>
   </div>
   <div class="description">
-    <p>This site allows you to verify that a macro does not break CPS rules as defined in the ILL rules document.</p>
+    <p>This site allows you to check if a macro breaks CPS rules as defined in the ILL rules document.<br>
+      <p2 id="second-line">
+        <b>Note:</b> just because a macro violates CPS rules, doesn't necessarily mean the level does.
+      </p2> 
+    </p>
   </div>
   <div class="inputBox" id="ib">
     <div class="inputBoxInner">
@@ -39,12 +43,18 @@
     Check CPS
   </p>
   <p class="made-by">
-    Made by EDSJustin
+    Made by EDSJustin with help from Flora
   </p>
   <div id="help-area">
     <img class="question-mark" id="question1" src="./img/help.png" alt="help">
     <p id="help-text">
       Help
+    </p>
+  </div>
+  <div id="help-area-2">
+    <img class="question-mark" id="question2" src="./img/help.png" alt="help2">
+    <p id="help-text-2">
+      CPS rules
     </p>
   </div>
     </div>
@@ -67,6 +77,14 @@
         <img class="arrow3" src="./img/arrow3.png" alt="Arrow3">
         <img class="hoverArrow3" src="./img/arrow3Hover.png" alt="Arrow3Hovered">
       </div>
+      <label id="cull">
+        Culling
+        <select id="culling">
+            <option value="None">None</option>
+            <option value="Min">Min</option>
+            <option value="Max">Max</option>
+        </select>
+    </label>
     </div>
       <h2>
         Results
@@ -104,12 +122,6 @@
         </a>
       </p2>
     </div>
-    <div id="help-area-2">
-      <img class="question-mark" id="question2" src="./img/help.png" alt="help2">
-      <p id="help-text-2">
-        CPS rules
-      </p>
-    </div>
     <div id="help-box-2" data-closeable>
       <button id="close-button-2" data-close>
         <span> &#10006; </span>
@@ -124,17 +136,18 @@
           <li style="padding-bottom:5px">18 clicks per second rate in any 1/3rd of a second to 1 second.</li>
           <li style="padding-bottom:5px">20 clicks per second rate in any stint of more than 3 clicks and shorter
             than 1/3rd of a second.</li>
-        </ul><br>
-        In two-player mode levels, both players must separately follow these rules.
+        </ul>
       </p1>
       <p2 class="p2">
-        <br>
-        <br><br><br>Minimum time for each number of clicks calculated by Big_Numbers in the 
-        ILL Discord server.
+        <br><br>This program checks if the above rules are satisfied for both players in a macro.
+        <br><br>If they're not, it will tell you what frames the violations occur at.
       </p2>
     </div>
     <p id="invalid-text">
       An error occured while parsing the macro. Please make sure your macro follows the required format.
+    </p>
+    <p id="fps-text">
+      FPS: N/A
     </p>
   </main>
   <script

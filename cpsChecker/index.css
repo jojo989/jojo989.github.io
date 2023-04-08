@@ -15,7 +15,7 @@ main{
 
 .description{
   position:relative;
-  top:10px;
+  top:18px;
   width:700px;
 }
 
@@ -26,7 +26,7 @@ h1{
 
 .inputBox{
   position:relative;
-  top:25px;
+  top:45px;
   background:#D9D9D9;
   width:550px;
   height:350px;
@@ -88,7 +88,7 @@ button:hover{
 
 .outputBox{
   position:relative;
-  bottom:325px;
+  bottom:350px;
   left: 730px;
   background:#D9D9D9;
   width:620px;
@@ -135,7 +135,7 @@ h2{
   background:#D9D9D9;
   width:110px;
   left:730px;
-  bottom:1050px;
+  bottom:1070px;
   padding:5px;
   font-size: 30px;
 }
@@ -190,7 +190,7 @@ h2{
 .retryText{
   position:relative;
   left:830px;
-  bottom:520px;
+  bottom:547px;
 }
 
 .img3{
@@ -222,7 +222,7 @@ h2{
 .downloadText{
   position:relative;
   left:1130px;
-  bottom:540px;
+  bottom:565px;
 }
 
 .checkmark{
@@ -233,14 +233,14 @@ h2{
 #check1{
   position:relative;
   left:930px;
-  bottom:1040px;
+  bottom:1065px;
   visibility: hidden;
 }
 
 #check2{
   position:relative;
   left:903px;
-  bottom:840px;
+  bottom:865px;
   visibility: hidden;
 }
 
@@ -252,14 +252,14 @@ h2{
 #cross1{
   position:relative;
   left:930px;
-  bottom:1074px;
+  bottom:1099px;
   visibility:hidden;
 }
 
 #cross2{
   position:relative;
   left:902px;
-  bottom:872px;
+  bottom:897px;
   visibility: hidden;
 }
 
@@ -292,7 +292,7 @@ h2{
   position:relative;
   width:550px;
   height:500px;
-  bottom:1122px;
+  bottom:1103px;
   background-color: #fdfdff;
   border: thin solid black;
   border-width: 1.5px;
@@ -314,7 +314,7 @@ h3{
 
 #help-area-2{
   position:relative;
-  bottom:820px;
+  bottom:130px;
   left: 180px;
   width:50px;
   cursor:pointer;
@@ -337,7 +337,7 @@ h3{
   position:relative;
   width:550px;
   height:500px;
-  bottom:1162px;
+  bottom:1103px;
   background-color: #fdfdff;
   border: thin solid black;
   border-width: 1.5px;
@@ -360,10 +360,38 @@ h3{
 
 #invalid-text{
   position:relative;
-  bottom:790px;
+  bottom:730px;
   width:485px;
   font-size: 17px;
   font-weight:600;
   color:#F51414;
   display:none;
+}
+
+#second-line{
+  position:relative;
+  top:8px;
+  font-size: 15px;
+}
+
+#fps-text{
+  position:relative;
+  bottom:1070px;
+  left:590px;
+  width:100px;
+  word-break: break-all;
+  display: none;
+}
+
+#culling{
+  position:relative;
+  left:5px;
+  width:70px;
+}
+
+#cull{
+  position:relative;
+  bottom:400px;
+  left:460px;
+  display: none;
 }
