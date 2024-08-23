@@ -185,121 +185,74 @@ function checkP2CpsBreaks(){
         p2Rule3MaxCull, p2Rule2MinCull, p2Rule3MinCull);
 }
 
-function derive(inputFrames, breakArray){
-    for(var i = 0; i < inputFrames.length; i++){
+ffunction derive(inputFrames, breakArray) {
+    for (var i = 0; i < inputFrames.length; i++) {
         var firstClickFrame = inputFrames[i];
         var frameOneSecondLater = firstClickFrame + framerate;
         var numClicks = 0;
         var lastClickWithinTime = firstClickFrame;
-        for(var j = 0; j < inputFrames.length; j++){
-            if(inputFrames[i + j] < frameOneSecondLater){
-                lastClickWithinTime = inputFrames[i + j];
-                numClicks ++;
-            }
-            else if(inputFrames[i + j] > frameOneSecondLater){
-                break;
-            }
-            else if(inputFrames[i + j] == frameOneSecondLater){
+
+        for (var j = 0; j < inputFrames.length; j++) {
+            if (inputFrames[i + j] < frameOneSecondLater) {
                 lastClickWithinTime = inputFrames[i + j];
                 numClicks++;
+            } else if (inputFrames[i + j] >= frameOneSecondLater) {
                 break;
             }
         }
-        var timeBetween = parseFloat((lastClickWithinTime-firstClickFrame))/framerate;
-        if(numClicks > 15){
-            breakArray.push("- " + numClicks + " clicks in 1s: [frame " + firstClickFrame+" to "+ frameOneSecondLater+
-            "]: (" + timeBetween.toFixed(3) + "s between first and last)\n");
+
+        var timeBetween = parseFloat((lastClickWithinTime - firstClickFrame)) / framerate;
+
+        if (numClicks > 15) {
+            breakArray.push("- " + numClicks + " clicks in 1s: [frame " + firstClickFrame + " to " + lastClickWithinTime +
+                "]: (" + timeBetween.toFixed(3) + "s between first and last)\n");
         }
     }
-} 
+}
 
- function Derive(inputFrames, breakArrayRule2, breakArrayRule3, rule2Max, rule3Max, rule2Min, rule3Min){
-    for(var i = 0; i < inputFrames.length; i++){
-        var min = true;
-        var max = false;
-        var _2break = false, _3break = false;
-        inputFramesWithinASecond = [];
+ function Derive(inputFrames, breakArrayRule2, breakArrayRule3, rule2Max, rule3Max, rule2Min, rule3Min) {
+    for (var i = 0; i < inputFrames.length; i++) {
+        var inputFramesWithinASecond = [];
         var firstClickFrame = inputFrames[i];
         var frameOneSecondLater = firstClickFrame + framerate;
-        var latestClick = firstClickFrame;
-        for(var j = 0; j < inputFrames.length; j++){
-            if(inputFrames[i + j] < frameOneSecondLater){
-                latestClick = inputFrames[i + j];
+
+        for (var j = 0; j < inputFrames.length; j++) {
+            if (inputFrames[i + j] < frameOneSecondLater) {
                 inputFramesWithinASecond.push(inputFrames[i + j]);
-            }
-            else{
+            } else {
                 break;
             }
         }
-        if(inputFramesWithinASecond.length < 4){ continue; }
-        for(var j = 1; j < inputFramesWithinASecond.length; j++){
-            var numClicks = j+1;
-            if(j < 3){ continue; }
+
+        if (inputFramesWithinASecond.length < 5) { continue; }
+
+        for (var j = 1; j < inputFramesWithinASecond.length; j++) {
+            var numClicks = j + 1;
+
             var framesBetweenClicks = inputFramesWithinASecond[j] - firstClickFrame;
-            var timeBetweenClicks = parseFloat(framesBetweenClicks)/framerate;
-            var cps = j/timeBetweenClicks;
-            
-            if(cps > 18){ //Candidate break
-                if(cps > 20 && timeBetweenClicks < parseFloat(1)/3){
-                    if(min == true){
-                        rule3Min.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
-                        + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
-                    }
-                    breakArrayRule3.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
-                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
+            var timeBetweenClicks = parseFloat(framesBetweenClicks) / framerate;
+            var cps = numClicks / timeBetweenClicks;
 
-                    maxString = '- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
-                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n";
-                    _3break = true;
-                    _2break = false;
-                    max = true;
-                    min = false;
-                }
-                else if(cps > 20 && timeBetweenClicks >= parseFloat(1)/3){
-                    if(min == true){
-                        rule2Min.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
-                        + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
-                    }
-                    breakArrayRule2.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
-                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
-
-                    maxString = '- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
-                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n";
-                    _3break = false;
-                    _2break = true;
-                    max = true;
-                    min = false;
-                }
-                else if(cps <= 20 && timeBetweenClicks >= parseFloat(1)/3){
-                    if(min == true){
-                        rule2Min.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
-                        + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
-                    }
-                    breakArrayRule2.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
-                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n");
-
-                    maxString = '- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " 
-                    + firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" +timeBetweenClicks.toFixed(3)+"s)\n";
-                    _3break = false;
-                    _2break = true;
-                    max = true;
-                    min = false;
-                }
-                else if(cps <= 20 && timeBetweenClicks < parseFloat(1)/3){
-                    continue;
-                }
+            if (numClicks >= 5 && cps > 45) {
+                breakArrayRule3.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " +
+                    firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" + timeBetweenClicks.toFixed(3) + "s)\n");
+                rule3Max.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " +
+                    firstClickFrame + " to " + inputFramesWithinASecond[j] + " (" + timeBetweenClicks.toFixed(3) + "s)\n");
             }
         }
-        if(max == true){
-            if(_2break == true){
-                rule2Max.push(maxString);
-            }
-            else if(_3break == true){
-                rule3Max.push(maxString);
+
+        // rule 3 ig
+        var frameMap = {};
+        for (var j = 0; j < inputFramesWithinASecond.length; j++) {
+            var frame = inputFramesWithinASecond[j];
+            frameMap[frame] = (frameMap[frame] || 0) + 1;
+            if (frameMap[frame] > 3) {
+                breakArrayRule2.push('- More than 3 clicks in frame ' + frame + "\n");
+                rule2Max.push('- More than 3 clicks in frame ' + frame + "\n");
             }
         }
     }
-} 
+}
 
 function validMacro(macro){
     const arrayOfLines = macro.trim().split('\n');
