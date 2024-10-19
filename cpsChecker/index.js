@@ -253,7 +253,14 @@ function derive(inputFrames, breakArray) {
                 var frameTime = inputFramesWithinASecond[j] - inputFramesWithinASecond[j - 1];
                 var clicksInFrame = Math.floor(1 / frameTime);
                 if (clicksInFrame > 3) {
-                    breakArrayRule2.push('- ' + clicksInFrame + " clicks per frame around frame " + inputFramesWithinASecond[j] + "\n");
+                    // Calculamos el número de clics y el tiempo
+                    var numClicks = j + 1;
+                    var stintStart = inputFramesWithinASecond[0];
+                    var stintEnd = inputFramesWithinASecond[j];
+                    var timeBetweenClicks = parseFloat(stintEnd - stintStart) / framerate;
+                    var cps = numClicks / timeBetweenClicks;
+
+                    breakArrayRule2.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " + stintStart + " to " + stintEnd + " (" + timeBetweenClicks.toFixed(3) + "s)\n");
                     _2break = true;
                     max = true;
                     min = false;
