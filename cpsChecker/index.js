@@ -253,7 +253,6 @@ function derive(inputFrames, breakArray) {
                 var frameTime = inputFramesWithinASecond[j] - inputFramesWithinASecond[j - 1];
                 var clicksInFrame = Math.floor(1 / frameTime);
                 if (clicksInFrame > 3) {
-                    // Calculamos el número de clics y el tiempo
                     var numClicks = j + 1;
                     var stintStart = inputFramesWithinASecond[0];
                     var stintEnd = inputFramesWithinASecond[j];
