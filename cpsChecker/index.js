@@ -248,23 +248,21 @@ function derive(inputFrames, breakArray) {
             }
         }
 
-        for (var j = 0; j < inputFramesWithinASecond.length; j++) {
-            if (j > 0 && (inputFramesWithinASecond[j] - inputFramesWithinASecond[j - 1] < (1 / 3))) {
-                var frameTime = inputFramesWithinASecond[j] - inputFramesWithinASecond[j - 1];
-                var clicksInFrame = Math.floor(1 / frameTime);
-                if (clicksInFrame > 3) {
-                    var numClicks = j + 1;
-                    var stintStart = inputFramesWithinASecond[0];
-                    var stintEnd = inputFramesWithinASecond[j];
-                    var timeBetweenClicks = parseFloat(stintEnd - stintStart) / framerate;
-                    var cps = numClicks / timeBetweenClicks;
+        for (var j = 0; j < inputFramesWithinASecond.length; j++) { 
+            var frameTime = inputFramesWithinASecond[j] - inputFramesWithinASecond[j - 1];
+            var clicksInFrame = Math.floor(1 / frameTime);
+            if (clicksInFrame > 3) {
+                var numClicks = j + 1;
+                var stintStart = inputFramesWithinASecond[0];
+                var stintEnd = inputFramesWithinASecond[j];
+                var timeBetweenClicks = parseFloat(stintEnd - stintStart) / framerate;
+                var cps = numClicks / timeBetweenClicks;
 
-                    breakArrayRule2.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " + stintStart + " to " + stintEnd + " (" + timeBetweenClicks.toFixed(3) + "s)\n");
-                    _2break = true;
-                    max = true;
-                    min = false;
+                breakArrayRule2.push('- ' + cps.toFixed(3) + " cps rate for the " + numClicks + " click stint from " + stintStart + " to " + stintEnd + " (" + timeBetweenClicks.toFixed(3) + "s)\n");
+                _2break = true;
+                max = true;
+                min = false;
                 }
-            }
         }
 
         if (max == true) {
