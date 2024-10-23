@@ -221,7 +221,7 @@ function derive(inputFrames, breakArray) {
         var frameOneSecondLater = firstClickFrame + framerate;
         var latestClick = firstClickFrame;
 
-        // ty saruz "fat" saruz
+        // Recolectar frames dentro de un segundo
         for (var j = 0; j < inputFrames.length; j++) {
             if (inputFrames[i + j] < frameOneSecondLater) {
                 latestClick = inputFrames[i + j];
