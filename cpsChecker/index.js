@@ -3645,7 +3645,7 @@ function derive(inputFrames, breakArray, violations) {
         // Compute 1-second window end (same as before)
         const frameOneSecondLater = computeEndFrame(firstClickFrame, hasTimeWarps);
 
-        while (j < inputFrames.length && inputFrames[j] <= frameOneSecondLater) {
+        while (j < inputFrames.length && inputFrames[j] < frameOneSecondLater) {
             j++;
         }
 
