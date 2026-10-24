@@ -273,7 +273,7 @@ function computeRollingCPS_Time(groupsWithTime) {
     currentClicks += current.count;
 
     // Remove clicks older than 1 second (REAL TIME)
-    while (groupsWithTime[left].time < current.time - 1) {
+    while (groupsWithTime[left].time <= current.time - 1) {
       currentClicks -= groupsWithTime[left].count;
       left++;
     } 
